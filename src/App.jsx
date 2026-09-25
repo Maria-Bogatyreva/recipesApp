@@ -1,4 +1,5 @@
 import RecipeList from "./features/recipes/RecipeList.jsx";
+import RecipeForm from "./features/recipes/RecipeForm.jsx";
 
 function App() {
 
@@ -6,6 +7,7 @@ function App() {
     <>
       <h1>Конструктор рецептов</h1>
       <RecipeList />
+      <RecipeForm />
     </>
   )
 }

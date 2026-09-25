@@ -109,3 +109,20 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.recipeForm {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.recipeForm_group {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.ingredients, .steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px
+}
