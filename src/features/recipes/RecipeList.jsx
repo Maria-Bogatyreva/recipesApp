@@ -1,9 +1,16 @@
 import {useDispatch, useSelector} from "react-redux";
-import {deleteRecipe} from "./recipesSlice.js";
+import {deleteRecipe, favoriteRecipe} from "./recipesSlice.js";
 
-export default function RecipeList({onRecipeEdit}) {
+export default function RecipeList({onRecipeEdit, editRecipeId}) {
   const recipes = useSelector(state =>    state.recipes.recipes);
   const dispatch = useDispatch();
+
+  const handleDeleteRecipe = (id) => {
+    dispatch(deleteRecipe(id));
+    if(id === editRecipeId) {
+      onRecipeEdit(undefined)
+    }
+  }
 
   return (
     <>
@@ -13,12 +20,17 @@ export default function RecipeList({onRecipeEdit}) {
           recipes.map(recipe => (
             <li key={recipe.id}>
               <h3>Название: {recipe.name} </h3>
+              <button type="button"
+                      onClick={()=>dispatch(favoriteRecipe(recipe.id))}
+                      aria-label={recipe.favorite ? 'Удалить из избранного' : 'Добавить в избранное'}>
+                {recipe.favorite ? '★' : '☆'}
+              </button>
               <div><i>Количество шагов:</i> {recipe.steps.length}</div>
               <div><i>Количество ингредиентов:</i> {recipe.ingredients.length}</div>
               <div>
                 <button onClick={()=>onRecipeEdit(recipe.id)}>Редактировать</button>
                 &nbsp;
-              < button onClick={() => dispatch(deleteRecipe(recipe.id))}>Удалить</button>
+              < button onClick={() =>handleDeleteRecipe(recipe.id)}>Удалить</button>
               </div>
                 <br/>
             </li>

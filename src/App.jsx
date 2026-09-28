@@ -4,17 +4,15 @@ import {useState} from "react";
 
 function App() {
   const [editRecipeId, setEditRecipeId] = useState();
-  console.log('edit', editRecipeId);
   const handleEditRecipe = (id) => {
-
     setEditRecipeId(id)
   }
 
   return (
     <>
       <h1>Конструктор рецептов</h1>
-      <RecipeList onRecipeEdit={handleEditRecipe}/>
-      <RecipeForm recipeId={editRecipeId}/>
+      <RecipeList onRecipeEdit={handleEditRecipe} editRecipeId={editRecipeId} />
+      <RecipeForm key={editRecipeId || 'new'} editRecipeId={editRecipeId} onRecipeEdit={handleEditRecipe}/>
     </>
   )
 }

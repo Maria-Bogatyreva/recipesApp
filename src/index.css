@@ -126,3 +126,8 @@ code {
   flex-direction: column;
   gap: 10px
 }
+
+.recipes_block {
+  display: flex;
+  gap: 40px;
+}

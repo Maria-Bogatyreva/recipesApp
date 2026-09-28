@@ -1,6 +1,6 @@
 import {useState} from "react";
-import {addRecipe} from "./recipesSlice.js";
-import {useDispatch} from "react-redux";
+import {addRecipe, updateRecipe} from "./recipesSlice.js";
+import {useDispatch, useSelector} from "react-redux";
 import {nanoid} from "@reduxjs/toolkit";
 
 const initialFormData = {
@@ -9,8 +9,26 @@ const initialFormData = {
   steps: [''],
   favorite: false,
 }
-export default function RecipeForm({editRecipeId}) {
-  const [formData, setFormData] = useState(initialFormData);
+
+// если есть рецепт для редактирования - возвращает его (без мутации!), если нет - пустое
+const getInitialFormData = (recipe) => {
+  if (!recipe) {
+    return initialFormData
+  } else {
+    return {
+      name: recipe.name,
+      ingredients: [...recipe.ingredients],
+      steps: [...recipe.steps],
+      favorite: recipe.favorite
+    }
+  }
+}
+export default function RecipeForm({editRecipeId, onRecipeEdit}) {
+  const recipes = useSelector(state => state.recipes.recipes);
+  const editRecipe = recipes.find(recipe => recipe.id === editRecipeId);
+
+  // Ленивая инициализация state
+  const [formData, setFormData] = useState(() => getInitialFormData(editRecipe));
   const dispatch = useDispatch();
 
   const handleChangeForm = (key, index, value) => {
@@ -52,10 +70,11 @@ export default function RecipeForm({editRecipeId}) {
 
   const isValidForm = (data) => {
     return data.name.trim().length > 0
-          && data.ingredients.some(i => i.trim().length > 0)
-          && data.steps.some(s => s.trim().length > 0)
+      && data.ingredients.some(i => i.trim().length > 0)
+      && data.steps.some(s => s.trim().length > 0)
   }
 
+  // Функция для очистки введенных данных
   const prepareRecipeData = (data) => {
     return {
       ...data,
@@ -69,13 +88,25 @@ export default function RecipeForm({editRecipeId}) {
     e.preventDefault();
     const cleanFormData = prepareRecipeData(formData);
     if (isValidForm(cleanFormData)) {
-      dispatch(addRecipe({
-        id: nanoid(),
-        ...cleanFormData
-      }))
+      if (!editRecipeId) {
+        // сохранение нового рецепта
+        dispatch(addRecipe({
+          id: nanoid(),
+          ...cleanFormData
+        }))
+        console.log('Рецепт успешно добавлен!')
+      } else {
+        // редактирование
+        dispatch(updateRecipe({
+          id: editRecipeId,
+          ...cleanFormData
+        }))
+        console.log('Рецепт успешно отредактирован!')
+      }
 
-      setFormData(initialFormData);
-      alert('Рецепт успешно добавлен!')
+      onRecipeEdit(undefined)
+      setFormData(initialFormData); // очистка после добавления/редактирования
+
     } else {
       alert('Заполните все поля!')
     }
@@ -88,7 +119,7 @@ export default function RecipeForm({editRecipeId}) {
         <div className="recipeForm_group">
           <span>Введите название</span>
           <input name="name" type="text" value={formData.name}
-                 onChange={(e) => handleChangeForm('name', '' ,e.target.value)}/>
+                 onChange={(e) => handleChangeForm('name', '', e.target.value)}/>
         </div>
         <div className="recipeForm_group">
           <span>Добавьте ингредиенты</span>
@@ -101,7 +132,9 @@ export default function RecipeForm({editRecipeId}) {
               })
             }
           </div>
-          <button type='button' onClick={() => handleAddElement('ingredients')} className="recipeForm_btn">Добавить ингредиент</button>
+          <button type='button' onClick={() => handleAddElement('ingredients')} className="recipeForm_btn">Добавить
+            ингредиент
+          </button>
         </div>
 
         <div className="recipeForm_group">
@@ -115,10 +148,17 @@ export default function RecipeForm({editRecipeId}) {
               })
             }
           </div>
-          <button type='button' onClick={() => handleAddElement('steps')} className="recipeForm_btn">Добавить шаг</button>
+          <button type='button' onClick={() => handleAddElement('steps')} className="recipeForm_btn">Добавить шаг
+          </button>
         </div>
 
-        <button type="submit">Сохранить рецепт</button>
+        <div>
+          {editRecipeId && <button type="button" onClick={()=>onRecipeEdit(undefined)}>Отменить редактирование</button>}
+          &nbsp;
+          <button type="submit">Сохранить рецепт</button>
+        </div>
+
+
       </form>
     </>
 
