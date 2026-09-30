@@ -1,7 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-  recipes: []
+  list: [],//пользовательские рецепты
+  public: [],
+  loading: false,
+  error: null//
+
 };
 
 const recipesSlice = createSlice({
@@ -9,19 +13,19 @@ const recipesSlice = createSlice({
   initialState,
   reducers: {
     addRecipe: (state, action) => {
-      state.recipes.push(action.payload)
+      state.list.push(action.payload)
     },
     deleteRecipe: (state, action) => {
-      state.recipes = state.recipes.filter(recipe => recipe.id !== action.payload)
+      state.list = state.list.filter(recipe => recipe.id !== action.payload)
     },
     updateRecipe: (state, action) => {
-      const editRecipeIndex = state.recipes.findIndex(recipe => recipe.id === action.payload.id);
+      const editRecipeIndex = state.list.findIndex(recipe => recipe.id === action.payload.id);
       if (editRecipeIndex >= 0) {
-        state.recipes[editRecipeIndex] = action.payload
+        state.list[editRecipeIndex] = action.payload
       }
     },
     favoriteRecipe: (state, action) => {
-      const currentRecipe = state.recipes.find(r => r.id === action.payload);
+      const currentRecipe = state.list.find(r => r.id === action.payload);
       if (currentRecipe) {
         currentRecipe.favorite = !currentRecipe.favorite;
       }
@@ -33,7 +37,10 @@ const recipesSlice = createSlice({
     })
   }
 })
+// Экспорт селекторов, для использования в компонентах
+export const selectListRecipes = (state) => state.recipes.list
 
+// Экспорт редюсера для добавления в store
 export default recipesSlice.reducer;
 
 export const {addRecipe, deleteRecipe, updateRecipe, favoriteRecipe} = recipesSlice.actions

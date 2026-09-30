@@ -1,7 +1,8 @@
 import {useSelector} from "react-redux";
+import {selectListRecipes} from "./_recipesSlice.js";
 
 export default function FavoriteRecipes() {
-  const recipes = useSelector(state => state.recipes.recipes);
+  const recipes = useSelector(selectListRecipes);
   const favoriteRecipes = recipes.filter(r => r.favorite)
 
   return (

@@ -1,9 +1,9 @@
 import {configureStore} from "@reduxjs/toolkit";
-import recipesReducer from '../features/recipes/recipesSlice.js'
+import recipesReducer from '../features/recipes/_recipesSlice.js'
 
 const preloadedState = {
-  recipes: {
-    recipes: [
+  recipes: { // Пользовательские рецепты
+    list: [
       {
         id: '1',
         name: "Паста Карбонара",
@@ -18,9 +18,13 @@ const preloadedState = {
         steps: ["Все порезать и смешать", "Добавить сметану", "Залить квасом"],
         favorite: false,
       }
-    ]
+    ],
+    public: [], // Публичные рецепты из API
+    loading: false,
+    error: null
   }
-}
+};
+
 
 const store = configureStore({
   preloadedState,

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {addRecipe, updateRecipe} from "./recipesSlice.js";
+import {addRecipe, selectListRecipes, updateRecipe} from "./_recipesSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {nanoid} from "@reduxjs/toolkit";
 
@@ -23,7 +23,7 @@ const getInitialFormData = (recipe) => {
   }
 }
 export default function RecipeForm({editRecipeId, onRecipeEdit}) {
-  const recipes = useSelector(state => state.recipes.recipes);
+  const recipes = useSelector(selectListRecipes);
   const editRecipe = recipes.find(recipe => recipe.id === editRecipeId);
 
   // Ленивая инициализация state

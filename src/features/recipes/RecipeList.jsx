@@ -1,8 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
-import {deleteRecipe, favoriteRecipe} from "./recipesSlice.js";
+import {deleteRecipe, favoriteRecipe, selectListRecipes} from "./_recipesSlice.js";
 
 export default function RecipeList({onRecipeEdit, editRecipeId}) {
-  const recipes = useSelector(state =>    state.recipes.recipes);
+  const recipes = useSelector(selectListRecipes);
   const dispatch = useDispatch();
 
   const handleDeleteRecipe = (id) => {
