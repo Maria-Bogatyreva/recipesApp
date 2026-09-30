@@ -21,9 +21,16 @@ const recipesSlice = createSlice({
       }
     },
     favoriteRecipe: (state, action) => {
-      const currentRecipe = state.recipes.find(r => r.id === action.payload)
-      currentRecipe.favorite = !currentRecipe.favorite;
+      const currentRecipe = state.recipes.find(r => r.id === action.payload);
+      if (currentRecipe) {
+        currentRecipe.favorite = !currentRecipe.favorite;
+      }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase('app/reset', () => {
+      return initialState;
+    })
   }
 })
 

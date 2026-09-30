@@ -13,7 +13,7 @@ export default function RecipeList({onRecipeEdit, editRecipeId}) {
   }
 
   return (
-    <>
+    <div>
       <h2>Список добавленных рецептов</h2>
       {recipes.length ?
         <ul>{
@@ -40,6 +40,6 @@ export default function RecipeList({onRecipeEdit, editRecipeId}) {
         :
         <p>Рецептов пока нет</p>
       }
-    </>
+    </div>
   )
 }

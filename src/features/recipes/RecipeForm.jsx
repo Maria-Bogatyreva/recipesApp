@@ -19,7 +19,6 @@ const getInitialFormData = (recipe) => {
       name: recipe.name,
       ingredients: [...recipe.ingredients],
       steps: [...recipe.steps],
-      favorite: recipe.favorite
     }
   }
 }
@@ -99,6 +98,7 @@ export default function RecipeForm({editRecipeId, onRecipeEdit}) {
         // редактирование
         dispatch(updateRecipe({
           id: editRecipeId,
+          favorite: editRecipe.favorite,
           ...cleanFormData
         }))
         console.log('Рецепт успешно отредактирован!')
