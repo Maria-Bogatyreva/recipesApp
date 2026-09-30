@@ -131,3 +131,8 @@ code {
   display: flex;
   gap: 40px;
 }
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+}
