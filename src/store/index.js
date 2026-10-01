@@ -1,5 +1,6 @@
 import {configureStore} from "@reduxjs/toolkit";
 import recipesReducer from '../features/recipes/_recipesSlice.js'
+import productsReducer from '../features/products/_productsSlice.js'
 
 const preloadedState = {
   recipes: { // Пользовательские рецепты
@@ -22,6 +23,22 @@ const preloadedState = {
     public: [], // Публичные рецепты из API
     loading: false,
     error: null
+  },
+  products: {
+    list: [
+      {
+        id: '1',
+        name: 'Яйца',
+        quantity: '1',
+        unit: 'шт'
+      },
+      {
+        id: '2',
+        name: 'Мука',
+        quantity: '1',
+        unit: 'кг'
+      }
+    ]
   }
 };
 
@@ -29,7 +46,8 @@ const preloadedState = {
 const store = configureStore({
   preloadedState,
   reducer: {
-    recipes: recipesReducer
+    recipes: recipesReducer,
+    products: productsReducer
   }
 })
 
