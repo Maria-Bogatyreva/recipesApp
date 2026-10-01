@@ -11,7 +11,7 @@ const productsSlice = createSlice({
     addProduct: (state, action) => {
       state.list.push(action.payload)
     },
-    editProduct: (state, action) => {
+    updateProduct: (state, action) => {
       const index = state.list.findIndex(p => p.id === action.payload.id);
       if (index >= 0) {
         state.list[index] = action.payload
@@ -26,4 +26,4 @@ const productsSlice = createSlice({
 // Экспорт селекторов, для использования в компонентах
 export const selectProducts = state => state.products.list
 export default productsSlice.reducer;
-export const {addProduct, editProduct, deleteProduct} = productsSlice.actions
+export const {addProduct, updateProduct, deleteProduct} = productsSlice.actions

@@ -29,7 +29,9 @@ export default function CustomRecipesPage() {
         <FavoriteRecipes />
       </div>
 
-      <RecipeForm key={editRecipeId || `new-${resetCount}`} editRecipeId={editRecipeId} onRecipeEdit={handleEditRecipe}/>
+      <RecipeForm key={editRecipeId || `new-${resetCount}`}
+                  editRecipeId={editRecipeId}
+                  onRecipeEdit={handleEditRecipe}/>
 
       <button onClick={handleResetApp}>СБРОСИТЬ ПРИЛОЖЕНИЕ</button>
     </>

@@ -29,13 +29,13 @@ const preloadedState = {
       {
         id: '1',
         name: 'Яйца',
-        quantity: '1',
+        quantity: 1,
         unit: 'шт'
       },
       {
         id: '2',
         name: 'Мука',
-        quantity: '1',
+        quantity: 1,
         unit: 'кг'
       }
     ]

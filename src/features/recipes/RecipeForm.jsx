@@ -2,6 +2,7 @@ import {useState} from "react";
 import {addRecipe, selectListRecipes, updateRecipe} from "./_recipesSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {nanoid} from "@reduxjs/toolkit";
+import {selectProducts} from "../products/_productsSlice.js";
 
 const initialFormData = {
   name: "",
@@ -24,6 +25,7 @@ const getInitialFormData = (recipe) => {
 }
 export default function RecipeForm({editRecipeId, onRecipeEdit}) {
   const recipes = useSelector(selectListRecipes);
+  const products = useSelector(selectProducts);
   const editRecipe = recipes.find(recipe => recipe.id === editRecipeId);
 
   // Ленивая инициализация state
@@ -114,52 +116,62 @@ export default function RecipeForm({editRecipeId, onRecipeEdit}) {
 
   return (
     <>
-      <h2>Добавить новый рецепт</h2>
-      <form className="recipeForm" onSubmit={handleSubmit}>
-        <div className="recipeForm_group">
-          <span>Введите название</span>
-          <input name="name" type="text" value={formData.name}
-                 onChange={(e) => handleChangeForm('name', '', e.target.value)}/>
-        </div>
-        <div className="recipeForm_group">
-          <span>Добавьте ингредиенты</span>
-          <div className="ingredients">
-            {
-              formData.ingredients.map((ingredient, index) => {
-                return <input key={index} type="text"
-                              value={ingredient}
-                              onChange={e => handleChangeForm('ingredients', index, e.target.value)}/>
-              })
-            }
-          </div>
-          <button type='button' onClick={() => handleAddElement('ingredients')} className="recipeForm_btn">Добавить
-            ингредиент
-          </button>
-        </div>
-
-        <div className="recipeForm_group">
-          <span>Опишите шаги</span>
-          <div className="steps">
-            {
-              formData.steps.map((step, index) => {
-                return <input key={index} type="text"
-                              value={step}
-                              onChange={e => handleChangeForm('steps', index, e.target.value)}/>
-              })
-            }
-          </div>
-          <button type='button' onClick={() => handleAddElement('steps')} className="recipeForm_btn">Добавить шаг
-          </button>
-        </div>
-
+      <div className="recipes_block">
         <div>
-          {editRecipeId && <button type="button" onClick={()=>onRecipeEdit(undefined)}>Отменить редактирование</button>}
-          &nbsp;
-          <button type="submit">Сохранить рецепт</button>
+          <h2>Добавить новый рецепт</h2>
+          <form className="recipeForm" onSubmit={handleSubmit}>
+            <div className="recipeForm_group">
+              <span>Введите название</span>
+              <input name="name" type="text" value={formData.name}
+                     onChange={(e) => handleChangeForm('name', '', e.target.value)}/>
+            </div>
+            <div className="recipeForm_group">
+              <span>Добавьте ингредиенты</span>
+              <div className="ingredients">
+                {
+                  formData.ingredients.map((ingredient, index) => {
+                    return <input key={index} type="text"
+                                  value={ingredient}
+                                  onChange={e => handleChangeForm('ingredients', index, e.target.value)}/>
+                  })
+                }
+              </div>
+              <button type='button' onClick={() => handleAddElement('ingredients')} className="recipeForm_btn">Добавить
+                ингредиент
+              </button>
+            </div>
+
+            <div className="recipeForm_group">
+              <span>Опишите шаги</span>
+              <div className="steps">
+                {
+                  formData.steps.map((step, index) => {
+                    return <input key={index} type="text"
+                                  value={step}
+                                  onChange={e => handleChangeForm('steps', index, e.target.value)}/>
+                  })
+                }
+              </div>
+              <button type='button' onClick={() => handleAddElement('steps')} className="recipeForm_btn">Добавить шаг
+              </button>
+            </div>
+
+            <div>
+              {editRecipeId && <button type="button" onClick={()=>onRecipeEdit(undefined)}>Отменить редактирование</button>}
+              &nbsp;
+              <button type="submit">Сохранить рецепт</button>
+            </div>
+
+
+          </form>
+        </div>
+        <div>
+          <h3>Продукты для рецепта</h3>
         </div>
 
 
-      </form>
+      </div>
+
     </>
 
   )
