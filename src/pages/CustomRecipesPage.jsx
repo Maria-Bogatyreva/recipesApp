@@ -33,6 +33,7 @@ export default function CustomRecipesPage() {
                   editRecipeId={editRecipeId}
                   onRecipeEdit={handleEditRecipe}/>
 
+      <br/>
       <button onClick={handleResetApp}>СБРОСИТЬ ПРИЛОЖЕНИЕ</button>
     </>
   )

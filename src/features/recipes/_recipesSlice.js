@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
   list: [],//пользовательские рецепты
@@ -7,6 +7,21 @@ const initialState = {
   error: null//
 
 };
+
+export const fetchPublicRecipes = createAsyncThunk(
+  'recipes/public',
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await fetch('https://api.spoonacular.com/recipes/random?number=10&apiKey=187ba0ea95494af99b0a6134c303af08');
+      if (!response.ok) {
+        throw new Error('error!')
+      }
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
 
 const recipesSlice = createSlice({
   name: 'recipes',
@@ -32,9 +47,22 @@ const recipesSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase('app/reset', () => {
-      return initialState;
-    })
+    builder
+      .addCase('app/reset', () => {
+        return initialState;
+      })
+      .addCase(fetchPublicRecipes.pending, (state) => {
+        state.loading = true;
+        state.error = null
+      })
+      .addCase(fetchPublicRecipes.fulfilled, (state, action) => {
+        state.loading = false
+        state.public = action.payload.recipes
+      })
+      .addCase(fetchPublicRecipes.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error
+      })
   }
 })
 // Экспорт селекторов, для использования в компонентах

@@ -3,6 +3,7 @@ import {addRecipe, selectListRecipes, updateRecipe} from "./_recipesSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {nanoid} from "@reduxjs/toolkit";
 import {selectProducts} from "../products/_productsSlice.js";
+import {Link} from "react-router-dom";
 
 const initialFormData = {
   name: "",
@@ -26,6 +27,7 @@ const getInitialFormData = (recipe) => {
 export default function RecipeForm({editRecipeId, onRecipeEdit}) {
   const recipes = useSelector(selectListRecipes);
   const products = useSelector(selectProducts);
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const editRecipe = recipes.find(recipe => recipe.id === editRecipeId);
 
   // Ленивая инициализация state
@@ -77,10 +79,13 @@ export default function RecipeForm({editRecipeId, onRecipeEdit}) {
 
   // Функция для очистки введенных данных
   const prepareRecipeData = (data) => {
+    const cleanIngredients = data.ingredients.map(i => i.trim()).filter(i => i.length > 0);
+    const unitIngredients = new Set(cleanIngredients.concat(selectedProducts));
+
     return {
       ...data,
       name: data.name.trim(),
-      ingredients: data.ingredients.map(i => i.trim()).filter(i => i.length > 0),
+      ingredients: Array.from(unitIngredients),
       steps: data.steps.map(s => s.trim()).filter(i => i.length > 0)
     }
   }
@@ -96,6 +101,7 @@ export default function RecipeForm({editRecipeId, onRecipeEdit}) {
           ...cleanFormData
         }))
         console.log('Рецепт успешно добавлен!')
+
       } else {
         // редактирование
         dispatch(updateRecipe({
@@ -108,9 +114,19 @@ export default function RecipeForm({editRecipeId, onRecipeEdit}) {
 
       onRecipeEdit(undefined)
       setFormData(initialFormData); // очистка после добавления/редактирования
+      setSelectedProducts([]);
 
     } else {
       alert('Заполните все поля!')
+    }
+  }
+
+  const handleAddProduct = (name) => {
+    if (!selectedProducts.includes(name)) {
+      setSelectedProducts(prev => [...prev, name])
+    }
+    else {
+      setSelectedProducts(prev => prev.filter(el => el !== name))
     }
   }
 
@@ -157,22 +173,34 @@ export default function RecipeForm({editRecipeId, onRecipeEdit}) {
             </div>
 
             <div>
-              {editRecipeId && <button type="button" onClick={()=>onRecipeEdit(undefined)}>Отменить редактирование</button>}
+              {editRecipeId &&
+                <button type="button" onClick={() => onRecipeEdit(undefined)}>Отменить редактирование</button>}
               &nbsp;
               <button type="submit">Сохранить рецепт</button>
             </div>
-
-
           </form>
         </div>
         <div>
-          <h3>Продукты для рецепта</h3>
+          <h3>Дополнительные продукты для рецепта</h3>
+          {
+            products.length ?
+              <div>
+                {
+                  products.map(product => (
+                    <div key={product.id}>
+                      <label>
+                        <input type="checkbox" checked={selectedProducts.includes(product.name)} onChange={() => handleAddProduct(product.name)}/>
+                        {product.name}
+                      </label>
+                    </div>
+                  ))
+                }
+              </div>
+              :
+              <div>Сначала <Link to="/products">добавьте продукты</Link></div>
+          }
         </div>
-
-
       </div>
-
     </>
-
   )
 }

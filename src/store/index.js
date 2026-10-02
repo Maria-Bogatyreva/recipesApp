@@ -28,15 +28,15 @@ const preloadedState = {
     list: [
       {
         id: '1',
-        name: 'Яйца',
-        quantity: 1,
-        unit: 'шт'
+        name: 'Креветки',
+        quantity: 100,
+        unit: 'г'
       },
       {
         id: '2',
-        name: 'Мука',
+        name: 'Орегано',
         quantity: 1,
-        unit: 'кг'
+        unit: 'г'
       }
     ]
   }
