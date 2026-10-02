@@ -61,12 +61,13 @@ const recipesSlice = createSlice({
       })
       .addCase(fetchPublicRecipes.rejected, (state, action) => {
         state.loading = false
-        state.error = action.error
+        state.error = action.payload
       })
   }
 })
 // Экспорт селекторов, для использования в компонентах
 export const selectListRecipes = (state) => state.recipes.list
+export const selectPublicRecipes = (state) => state.recipes.public
 
 // Экспорт редюсера для добавления в store
 export default recipesSlice.reducer;
