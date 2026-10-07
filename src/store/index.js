@@ -1,6 +1,7 @@
 import {configureStore} from "@reduxjs/toolkit";
 import recipesReducer from '../features/recipes/_recipesSlice.js'
 import productsReducer from '../features/products/_productsSlice.js'
+import {loggerMiddleware} from "./middleware/logger.js";
 
 const preloadedState = {
   recipes: { // Пользовательские рецепты
@@ -48,7 +49,8 @@ const store = configureStore({
   reducer: {
     recipes: recipesReducer,
     products: productsReducer
-  }
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(loggerMiddleware)
 })
 
 export default store;

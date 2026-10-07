@@ -10,7 +10,6 @@ export default function PublicRecipesPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('useeffect')
       dispatch(fetchPublicRecipes())
   }, [dispatch]);
 
